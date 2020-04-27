@@ -1,0 +1,11 @@
+: 1
+name: pioneer19_utils
+version: 0.1.0-a.0.z
+summary: pioneer19's common c++ utils
+license: ASLv2
+description-file: README.md
+url: https://github.org/pioneer19/pioneer19_utils
+email: pioneer19@post.cz
+depends: * build2 >= 0.12.0
+depends: * bpkg >= 0.12.0
+#depends: libhello ^1.0.0
