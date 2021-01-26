@@ -40,14 +40,14 @@ struct CoroutineAwaiter
         alignas(ResumeType) uint8_t resume_value[sizeof(ResumeType)];
 
         std::experimental::suspend_never  initial_suspend() { return {}; }
-        auto final_suspend()
+        auto final_suspend() noexcept
         {
             struct Awaiter {
                 std::experimental::coroutine_handle<>& caller_handle;
-                bool await_ready() { return false; }
-                auto await_suspend( std::experimental::coroutine_handle<> )
+                bool await_ready() noexcept { return false; }
+                auto await_suspend( std::experimental::coroutine_handle<> ) noexcept
                 { return caller_handle; }
-                void await_resume() {}
+                void await_resume() noexcept {}
             };
             return Awaiter{ caller_handle };
         }
@@ -97,14 +97,14 @@ struct CoroutineAwaiter<void>
                 = std::experimental::noop_coroutine() ;
 
         std::experimental::suspend_never  initial_suspend() { return {}; }
-        auto final_suspend()
+        auto final_suspend() noexcept
         {
             struct Awaiter {
                 std::experimental::coroutine_handle<>& caller_handle;
-                bool await_ready() { return false; }
-                auto await_suspend( std::experimental::coroutine_handle<> )
+                bool await_ready() noexcept { return false; }
+                auto await_suspend( std::experimental::coroutine_handle<> ) noexcept
                 { return caller_handle; }
-                void await_resume() {}
+                void await_resume() noexcept {}
             };
             return Awaiter{ caller_handle };
         }
@@ -166,7 +166,7 @@ struct CommonCoroutine
     struct promise_type
     {
         std::experimental::suspend_never  initial_suspend() { return {}; }
-        std::experimental::suspend_always final_suspend()   { return {}; }
+        std::experimental::suspend_always final_suspend() noexcept  { return {}; }
         auto get_return_object() { return coro_handler::from_promise(*this); }
         void unhandled_exception() { std::terminate(); }
         void return_void() {}
@@ -204,7 +204,7 @@ struct LinkedCoroutine
     struct promise_type : public Node
     {
         std::experimental::suspend_always initial_suspend() { return {}; }
-        std::experimental::suspend_never  final_suspend()   { return {}; }
+        std::experimental::suspend_never  final_suspend() noexcept  { return {}; }
         coro_handler get_return_object() { return coro_handler::from_promise(*this); }
         void unhandled_exception() { std::terminate(); }
         void return_void() {}
